@@ -1,6 +1,11 @@
 from tkinter import *
 from tkinter import filedialog as fd
 
+import matplotlib.pyplot as plt
+from nltk.corpus import wordnet
+from tkinter import messagebox
+from wordcloud import WordCloud
+
 from help import help_text
 import time
 
@@ -26,6 +31,44 @@ def show_information():
     output_help_text.configure(state='disabled')
 
 
+def there_only_letters_in_the_word(word):
+    for i in list(word):
+        if i == ' ':
+            return False
+    return True
+
+
+def semantic_analysis():
+    text = calculated_text.get(1.0, END)
+    text = text.replace('\n', '')
+    if text == '':
+        return None
+    start = time.time()
+    if there_only_letters_in_the_word(text):
+        hyponyms = []
+        # Синсет - набор синонимов, имеющих общее значение. Подбираем синонимы для слова.
+        synsets = wordnet.synsets(text)
+        text = ''
+        #Synset представляет группу лемм, имеющих одинаковый смысл, а лемма представляет собой отдельную словоформу.
+        for lemma in synsets[0].lemmas():
+            text += lemma.name() + ' '
+            if lemma.antonyms():
+                text += lemma.antonyms()[0].name() + ' '
+        for i in synsets[0].hyponyms():
+            hyponyms.append(i.lemma_names()[0])
+            text += i.lemma_names()[0] + ' '
+        for j in synsets[0].hypernyms():
+            text += j.lemma_names()[0] + ' '
+        word_cloud = WordCloud(relative_scaling=1.0,).generate(text)
+        plt.imshow(word_cloud)
+        plt.axis("off")
+        plt.show()
+        end = time.time()
+        print("Total time: {:.1f}".format(end - start))
+    else:
+        messagebox.showwarning('Warning!!!', 'One word!', type='ok')
+
+
 root = Tk()
 root.title("Semantic text analysis")
 
@@ -44,6 +87,6 @@ help_button.grid(row=0, column=3)
 open_button = Button(text="Open file", width=10, command=open_file)
 open_button.grid(row=1, column=3)
 
-ok_button = Button(text="Semantic analysis", width=14)
+ok_button = Button(text="Semantic analysis", width=14, command=semantic_analysis)
 ok_button.grid(row=2, column=3)
 root.mainloop()
