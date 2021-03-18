@@ -1,0 +1,27 @@
+from tkinter import *
+
+
+root = Tk()
+root.title("Semantic text analysis")
+
+root.resizable(width=False, height=False)
+root.geometry("620x150+500+250")
+
+label = Label(root, text='Input word:', font=("Comic Sans MS", 13, "bold"))
+label.grid(row=0, column=0)
+
+calculated_text = Text(root, height=5, width=50)
+calculated_text.grid(row=1, column=1, sticky='nsew', columnspan=2)
+
+help_button = Button(text="Help", width=10)
+help_button.grid(row=0, column=3)
+
+open_button = Button(text="Open file", width=10)
+open_button.grid(row=1, column=3)
+
+ok_button = Button(text="Semantic analysis", width=14)
+ok_button.grid(row=2, column=3)
+
+
+
+root.mainloop()
