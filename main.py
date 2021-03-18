@@ -1,4 +1,13 @@
 from tkinter import *
+from tkinter import filedialog as fd
+
+
+def open_file():
+    file_name = fd.askopenfilename(filetypes=(("TXT files", "*.txt"),))
+    if file_name != '':
+        file = open(file_name, 'r')
+        data = file.readlines()
+        calculated_text.insert(1.0, data)
 
 
 root = Tk()
@@ -16,12 +25,9 @@ calculated_text.grid(row=1, column=1, sticky='nsew', columnspan=2)
 help_button = Button(text="Help", width=10)
 help_button.grid(row=0, column=3)
 
-open_button = Button(text="Open file", width=10)
+open_button = Button(text="Open file", width=10, command=open_file)
 open_button.grid(row=1, column=3)
 
 ok_button = Button(text="Semantic analysis", width=14)
 ok_button.grid(row=2, column=3)
-
-
-
 root.mainloop()
