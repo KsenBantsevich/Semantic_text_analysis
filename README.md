@@ -16,4 +16,5 @@ Natural language IP interface lab#3, 6 semester
         содержит понятный набор инструментов и средств, а также help-средства;
 
 Результат семантического анализа текста английского языка представлен в виде WordCloud.
+
 ***A word cloud (also known as a tag cloud) is a visual representation of words.***
