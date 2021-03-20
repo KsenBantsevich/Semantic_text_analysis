@@ -1,9 +1,10 @@
 from tkinter import *
 from tkinter import filedialog as fd
+from tkinter import messagebox
 
 import matplotlib.pyplot as plt
 from nltk.corpus import wordnet
-from tkinter import messagebox
+
 from wordcloud import WordCloud
 
 from help import help_text
@@ -31,7 +32,7 @@ def show_information():
     output_help_text.configure(state='disabled')
 
 
-def there_only_letters_in_the_word(word):
+def letters_in_the_word(word):
     for i in list(word):
         if i == ' ':
             return False
@@ -44,9 +45,10 @@ def semantic_analysis():
     if text == '':
         return None
     start = time.time()
-    if there_only_letters_in_the_word(text):
+    if letters_in_the_word(text):
         hyponyms = []
-        # Синсет - набор синонимов, имеющих общее значение. Подбираем синонимы для слова.
+        #Кольцо синонимов или синсет - это группа элементов данных, которые считаются семантически эквивалентными
+        # для целей поиска информации
         synsets = wordnet.synsets(text)
         text = ''
         #Synset представляет группу лемм, имеющих одинаковый смысл, а лемма представляет собой отдельную словоформу.
@@ -54,11 +56,13 @@ def semantic_analysis():
             text += lemma.name() + ' '
             if lemma.antonyms():
                 text += lemma.antonyms()[0].name() + ' '
+        # Получение гиперонимов (более общих сущностей) и гипонимов (частных сущностей) заданного синсета
         for i in synsets[0].hyponyms():
             hyponyms.append(i.lemma_names()[0])
             text += i.lemma_names()[0] + ' '
         for j in synsets[0].hypernyms():
             text += j.lemma_names()[0] + ' '
+        #Облако тегов — это визуальное представление списка
         word_cloud = WordCloud(relative_scaling=1.0,).generate(text)
         plt.imshow(word_cloud)
         plt.axis("off")
