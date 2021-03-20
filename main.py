@@ -47,11 +47,11 @@ def semantic_analysis():
     start = time.time()
     if letters_in_the_word(text):
         hyponyms = []
-        #Кольцо синонимов или синсет - это группа элементов данных, которые считаются семантически эквивалентными
+        # Кольцо синонимов или синсет - это группа элементов данных, которые считаются семантически эквивалентными
         # для целей поиска информации
         synsets = wordnet.synsets(text)
         text = ''
-        #Synset представляет группу лемм, имеющих одинаковый смысл, а лемма представляет собой отдельную словоформу.
+        # Synset представляет группу лемм, имеющих одинаковый смысл, а лемма представляет собой отдельную словоформу.
         for lemma in synsets[0].lemmas():
             text += lemma.name() + ' '
             if lemma.antonyms():
@@ -62,15 +62,19 @@ def semantic_analysis():
             text += i.lemma_names()[0] + ' '
         for j in synsets[0].hypernyms():
             text += j.lemma_names()[0] + ' '
-        #Облако тегов — это визуальное представление списка
-        word_cloud = WordCloud(relative_scaling=1.0,).generate(text)
-        plt.imshow(word_cloud)
-        plt.axis("off")
-        plt.show()
+        word_cloud(text)
         end = time.time()
         print("Total time: {:.1f}".format(end - start))
     else:
         messagebox.showwarning('Warning!!!', 'One word!', type='ok')
+
+
+def word_cloud(text):
+    # Облако тегов — это визуальное представление списка
+    cloud = WordCloud(relative_scaling=1.0, ).generate(text)
+    plt.imshow(cloud)
+    plt.axis("off")
+    plt.show()
 
 
 root = Tk()
